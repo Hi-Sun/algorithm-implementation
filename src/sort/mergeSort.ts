@@ -11,11 +11,38 @@
  */
 
 // 使用归并排序算法对 {14, 33, 27, 10, 35, 19, 42, 44} 完成升序排序
-const mergeSort = (list: Array<number>) => {
+//实现归并排序算法中的分割操作，[p,q]为指定分割区域
+const mergeSort = (list: Array<number>, p: number, q: number) => {
   const _len = list.length;
-  if (_len <= 1) {
-    return list;
+  if (_len <= 1 || p >= q) {
+    return;
+  }
+  //对 [p,q] 区域进行分割
+  const middle = (p + q) / 2;
+  mergeSort(list, p, middle);
+  mergeSort(list, middle, q);
+  merge(list, p, middle, q);
+}
+
+function merge(list: Array<number>, p: number, mid: number, q: number) {
+  // 分别将 [p,mid] 和 [mid+1,q] 区域内的元素拷贝到 leftarr 和 rightarr 列表中
+  const leftArr = list.slice(p, mid);
+  const rightArr = list.slice(mid, q);
+  // 逐个比较 leftarr 和 rightarr 列表中的元素，每次将较小的元素添加到 arr 列表中的 [p,q] 区域内
+  let i = 0, j = 0, k = p;
+  while (k <= q) {
+    if (leftArr[i] <= rightArr[j]) {
+      list[k - 1] = leftArr[i];
+      i = i + 1
+    } else {
+      list[k - 1] = rightArr[j];
+      j = j + 1;
+      k = k + 1;
+    }
   }
 
-  
 }
+const arr = [7, 5, 2, 4, 1, 6, 3, 0]
+
+mergeSort(arr, 1, 8)
+console.log(arr)
